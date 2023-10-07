@@ -13,12 +13,59 @@ Project consists of:
 postgresql, etcd, haproxy can be deployed via ansible playbooks (https://github.com/vitabaks/postgresql_cluster, branch: _master_, commit: _e65abf1_).
 
 ## Deployment steps
-1. clone git repo
+0. Requirements.
+Use terminal to deploy, ansible & helm required.
+Please do not forget to 
+This deployment should be running from your pc, so please fill your ~/.ssh/config with Jump host settings like this:
+
 ```shell
-git clone git@github.com:vitabaks/postgresql_cluster.git
+Host <your-public-haproxy-host>
+   User <username>
+   IdentityFile <your-vm-admin-private-key-file>
+   Hostname <your-public-haproxy-host>
+
+Host 10.0.10.*
+   ProxyJump <your-public-haproxy-host>
 ```
-3. apply patch
-4. deploy postgresql, etcd, haproxy
-5. create weather db tables (cities, forecast)
-6. add data to db
-7. deploy weather-api helm-chart
+
+2. Clone this git repo.
+
+  ```shell
+  git clone --recurse-submodules git@github.com:duke0x/weather-api-deploy.git
+  ```  
+  This repo contains submodule, so do not forget _--recurse-submodules_ flag.
+
+2. Enter clonned directory.
+
+3. Apply patch.
+
+  ```shell
+  git apply --directory=postgresql_cluster pg_cluster.patch
+  ```
+
+4. Deploy etcd, postgresql and haproxy.
+
+  ```shell
+  ansible-playbook deploy_pgcluster.yml
+  ```
+
+5. Create weather db tables (cities, forecast)
+
+```shell
+ansible-playbook -i postgresql_cluster/inventory create_weather_tables.yaml
+```
+
+7. Deploy weather-api helm-chart to k8s
+
+```shell
+helm --kubeconfig <path-to-your-kubeconfig-file> install -n sre-cource-student-104 weather-api weather-api
+```
+
+8. Add data to weather databases (optional)
+   // in progress
+
+9. Check it is working
+
+```shell
+curl -H "Host: weather-api" -v http://91.185.85.213/cities/1
+```
