@@ -10,7 +10,7 @@ Project consists of:
 - etcd (runs on VMs) for postgresql cluster state
 - haproxy (runs on VM) as balancer
 
-postgresql, etcd, haproxy can be deployed via ansible playbooks (https://github.com/vitabaks/postgresql_cluster/tree/master, commit: _e65abf1_).
+postgresql, etcd, haproxy can be deployed via ansible playbooks (https://github.com/vitabaks/postgresql_cluster, branch: _master_, commit: _e65abf1_).
 
 ## Deployment steps
 1. clone git repo

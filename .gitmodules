@@ -1,0 +1,3 @@
+[submodule "postgresql_cluster"]
+	path = postgresql_cluster
+	url = https://github.com/vitabaks/postgresql_cluster
