@@ -1,0 +1,59 @@
+# Default values for weather-api.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 3
+
+ingress:
+  enabled: true
+  className: nginx
+  hosts:
+    - host: weather-api
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  annotations: {}
+  tls: []
+
+resources:
+  requests:
+    cpu: "125m"
+    memory: "128Mi"
+  limits:
+    cpu: "250m"
+    memory: "256Mi"
+
+service:
+  type: ClusterIP
+  port: 80
+
+image:
+  repository: ghcr.io/ldest/sre-course/api
+  pullPolicy: IfNotPresent
+  tag: c4f3862
+
+appSettings:
+  pgConnection: "server=91.185.84.81; port=5000; database=weather; user id=weather-api-user; password=weather-api-user-pass;"
+
+serviceAccount: {}
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext: {}
+securityContext: {}
+
+autoscaling: {}
+
+volumes: []
+volumeMounts: []
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
