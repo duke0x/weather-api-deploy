@@ -1,0 +1,25 @@
+---
+- hosts: master
+  become: yes
+  become_user: postgres
+  tasks:
+    - name: Create cities table
+      community.postgresql.postgresql_table: 
+        table: cities
+        db: weather
+        owner: weather-api-user
+        columns:
+          - id bigserial
+          - name varchar(255)
+
+    - name: Create forecast table
+      community.postgresql.postgresql_table: 
+        table: forecast
+        db: weather
+        owner: weather-api-user
+        columns:
+          - id bigserial
+          - cityId bigint
+          - dateTime bigint
+          - temperature integer
+          - summary text
