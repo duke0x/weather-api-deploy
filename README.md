@@ -65,9 +65,11 @@ postgresql, etcd, haproxy can be deployed via ansible playbooks (https://github.
 
 0. Add data to weather databases (optional)
 
-    // In progress
+    ```shell
+    ansible-playbook -i postgresql_cluster/inventory import_dummy_data.yaml
+    ```
 
-9. Check it is working
+1. Check it is working
 
     ```shell
     curl -H "Host: weather-api" -v http://91.185.85.213/cities/1

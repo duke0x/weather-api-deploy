@@ -1,0 +1,41 @@
+---
+- hosts: master
+  become: yes
+  become_user: postgres
+  tasks:
+    - name: Copy cities dummy data to tmp dir
+      ansible.builtin.copy:
+        src: files/cities.csv
+        dest: /tmp/cities.csv
+      #when: /tmp/cities.csv.stat.exists == False
+
+    - name: Import cities dummy data
+      community.postgresql.postgresql_copy:
+        copy_from: /tmp/cities.csv
+        db: weather
+        dst: cities
+        options:
+          format: csv
+    
+    - name: Remove cities dummy data file
+      ansible.builtin.file:
+        path: /tmp/cities.csv
+        state: absent
+
+    - name: Copy forecast dummy data to tmp dir
+      ansible.builtin.copy:
+        src: files/forecast.csv
+        dest: /tmp/forecast.csv
+
+    - name: Import forecast dummy data
+      community.postgresql.postgresql_copy:
+        copy_from: /tmp/forecast.csv
+        db: weather
+        dst: forecast
+        options:
+          format: csv
+    
+    - name: Remove forecast dummy data file
+      ansible.builtin.file:
+        path: /tmp/forecast.csv
+        state: absent
